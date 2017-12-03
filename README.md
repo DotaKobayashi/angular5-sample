@@ -1,27 +1,38 @@
-# Angular5Sample
+# Angular5 deploy to GAE
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.4.
+## docker build
 
-## Development server
+```
+docker build -t angular5 .
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## docker run and npm install
 
-## Code scaffolding
+```
+docker run -it --rm -v $(pwd):/app angular5:latest /bin/ash
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## container
+cd app/my-project-name
+npm install
 
-## Build
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## ng serve
 
-## Running unit tests
+```
+docker run -it --rm -w /app -v $(pwd)/my-project-name:/app -p 4200:4200 angular5:latest ng serve --host 0.0.0.0
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## ng build
 
-## Running end-to-end tests
+```
+docker run -it --rm -w /app -v $(pwd)/my-project-name:/app angular5:latest ng build --target=production --output-path=./service/static
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## gcloud app deploy
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```
+export PROJECT_ID=PROJECT_ID
+cd my-project-name/service
+gcloud app deploy --project=${PROJECT_ID} app.yaml
+```
